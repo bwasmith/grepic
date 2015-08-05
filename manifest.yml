@@ -1,0 +1,5 @@
+---
+applications:
+- name:   grepic
+  host:   grepic
+  memory: 512M
