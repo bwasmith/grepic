@@ -35,6 +35,14 @@ var helpers = {
       }
     })
   },
+
+  getProjectData: function(token) {
+    return axios.get("https://www.pivotaltracker.com/services/v5/projects?fields=name", {
+      headers: {
+        'X-TrackerToken': token
+      }
+    })
+  },
 };
 
 export default helpers;
