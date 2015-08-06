@@ -24,7 +24,6 @@ class Main extends React.Component{
 
     if(error){ alert('There was an error during the authentication'); }
 
-
 		return(
 			<div className="main-container">
 				<div className="container">
@@ -51,7 +50,7 @@ class Main extends React.Component{
 
           {
             this.state.contributors ?
-              <Contributions contributors={this.state.contributors} /> :
+              <Contributions key={this.state.currentEpic} contributors={this.state.contributors} /> :
               null
           }
 
@@ -71,7 +70,9 @@ class Main extends React.Component{
           token: token,
           projects: projects,
           epics: null,
-          contributions: null
+          contributions: null,
+          currentEpic: null,
+          currentProject: null
         });
       }.bind(this));
 
@@ -85,7 +86,9 @@ class Main extends React.Component{
         this.setState({
           currentProject: projectId,
           epics: epics,
-          contributions: null
+          contributions: null,
+          currentEpic: null
+
         });
       }.bind(this));
   }
@@ -94,7 +97,8 @@ class Main extends React.Component{
     var currentEpic = this._findElemInArray(this.state.epics, 'id', epicId)
     helpers.getContributors(this.state.currentProject, currentEpic.name, this.state.token)
       .then(function(response) {
-        this._processContributorResponse(response.data);
+        this._processContributorResponse(response.data, epicId);
+
       }.bind(this));
   }
 
@@ -130,7 +134,7 @@ class Main extends React.Component{
       ..
     ]
   */
-  _processContributorResponse(data){
+  _processContributorResponse(data, epicId){
     var contributors = {};
     var epicTotalPoints = 0;
     var epicTotalStories = 0;
@@ -168,7 +172,8 @@ class Main extends React.Component{
     this.setState({
       totalPoints: epicTotalPoints,
       totalStories: epicTotalStories,
-      contributors: contributors
+      contributors: contributors,
+      currentEpic: epicId
     })
   }
 };

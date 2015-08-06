@@ -9,11 +9,10 @@ class Contributions extends React.Component {
 
   render() {
     var contributors = this.props.contributors;
-
-    var contributorRows = [];
+    var contributorList = [];
 
     for(var key in contributors) {
-      contributorRows.push(this._buildRow(contributors[key]));
+      contributorList.push({key: key, value: contributors[key]} );
     }
 
     return (
@@ -23,18 +22,39 @@ class Contributions extends React.Component {
           <td>Total Points</td>
           <td>Total Story Count</td>
         </tr>
-        {contributorRows}
+        {
+          contributorList.map(function(contributor, i) {
+            return (<ContributionsRow key={contributor.key + i} subject={contributor.value} />);
+          })
+        }
       </table>
     );
   }
 
-  _buildRow(subject){
+  _buildRow(subject, id){
+    return (
+       <ContributionsRow key={id} subject={subject}/>
+    );
+  }
+}
+
+class ContributionsRow extends React.Component { 
+  render() {
+    var subject = this.props.subject;
     return (
         <tr>
-          <td>{subject.initials}</td>
-          <td>{subject.total_points}</td>
-          <td>{subject.total_stories}</td>
+          <TableDiv content={subject.initials}/>
+          <TableDiv content={subject.total_points}/>
+          <TableDiv content={subject.total_stories}/>
         </tr>
+    );
+  }
+}
+
+class TableDiv extends React.Component {
+  render () {
+    return (
+      <td>{this.props.content}</td>
     );
   }
 }
