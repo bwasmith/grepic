@@ -9,12 +9,14 @@ class ProjectDropdown extends React.Component {
   }
 
   render() {
-    <Dropdown
-      dropdownItems={this.state.epics}
-      onDropdownSubmit={function(){return null;}} /> :
-    null
-  }
+    var projectList = this.props.projects;
 
+    return (
+      <Dropdown
+      dropdownItems={projectList}
+      onDropdownSelect={this.props.onProjectSelect} />
+    );
+  }
 }
 
 export default ProjectDropdown;

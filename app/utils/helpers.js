@@ -44,8 +44,16 @@ var helpers = {
     })
   },
 
-  getEpics: function(project, token){
+  getEpics: function(project, token) {
     return axios.get(`https://www.pivotaltracker.com/services/v5/projects/${project}/epics?fields=name`, {
+      headers: {
+        'X-TrackerToken': token
+      }
+    })
+  },
+
+  getContributors: function(project, epicName, token) {
+    return axios.get(`https://www.pivotaltracker.com/services/v5/projects/${project}/stories?with_label=${epicName}&fields=owners,story_type,estimate,current_state`, {
       headers: {
         'X-TrackerToken': token
       }
