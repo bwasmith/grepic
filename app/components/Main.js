@@ -5,6 +5,7 @@ import ProjectDropdown from './ProjectDropdown';
 import EpicDropdown from './EpicDropdown';
 import Contributions from './Contributions';
 import helpers from '../utils/helpers';
+import ColorLegend from './ColorLegend';
 
 class Main extends React.Component{
 
@@ -15,6 +16,7 @@ class Main extends React.Component{
     this. _handleEpicSelect = this. _handleEpicSelect.bind(this);
     this. _findElemInArray = this. _findElemInArray.bind(this);
     this. _processContributorResponse = this. _processContributorResponse.bind(this);
+    this. _handleColorLegendChange = this. _handleColorLegendChange.bind(this);
     this.state = {token: null};
   }
 
@@ -29,6 +31,7 @@ class Main extends React.Component{
 				<div className="container">
 
           <TokenForm onTokenSubmit={this._handleTokenSubmit} />
+          <ColorLegend />
 
           {
             this.state.token ?
@@ -60,7 +63,7 @@ class Main extends React.Component{
     );
   }
 
-          
+
   _handleTokenSubmit(token) {
     helpers.getProjectData(token)
       .then(function(response) {
@@ -114,12 +117,12 @@ class Main extends React.Component{
   }
 
   /**
-    Incoming: [ 
+    Incoming: [
       {
-        estimate: 
-        id: *storyid* 
+        estimate:
+        id: *storyid*
         owners: [owner list]
-        story_type   
+        story_type
       }
       ..
     ]
@@ -174,6 +177,14 @@ class Main extends React.Component{
       totalStories: epicTotalStories,
       contributors: contributors,
       currentEpic: epicId
+    })
+  }
+
+  _handleColorLegendChange() {
+    console.log('handling color legend change!')
+    var colorFn = helpers.pointsToHue();
+    this.setState({
+      colorFn: colorFn
     })
   }
 };

@@ -1,4 +1,12 @@
 import axios from 'axios';
+import interpolatingPolynomial from 'interpolating-polynomial';
+
+//hue values for each 'level', see http://hslpicker.com/
+// var WANDERING = 120,
+//     COMFY = 70,
+//     SOLOREADY = 57,
+//     ARCHITECT = 31,
+//     ANCHOR = 18;
 
 function getRepos(username){
 	return axios.get(`https://api.github.com/users/${username}/repos`);
@@ -58,6 +66,32 @@ var helpers = {
         'X-TrackerToken': token
       }
     })
+  },
+
+  generateColorFn: function(dict) {
+    var f = interpolatingPolynomial([[dict.wandering, WANDERING],
+                                     [dict.comfy, COMFY],
+                                     [dict.soloReady, SOLOREADY],
+                                     [dict.architect, ARCHITECT],
+                                     [dict.anchor, ANCHOR]]);
+    return f;
+  },
+
+  setColor: function(colorFn, points, colorKey) {
+    if(points > colorKey.anchor){
+      points = colorKey.anchor;
+    }
+    else if(points < colorKey.wandering){
+      points = colorKey.wandering;
+    }
+    var hue = colorFn(points);
+    if(hue < ANCHOR){
+      console.log(`The color function mapped your ${points} points to a hue
+        less than the anchor color. Your hue was ${hue} so we automatically
+        set it to ${ANCHOR}.`);
+      hue = ANCHOR;
+    };
+    return "hsl(" + hue + ",100%,50%)";
   }
 };
 
