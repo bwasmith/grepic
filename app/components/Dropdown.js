@@ -4,9 +4,9 @@ class Dropdown extends React.Component {
 
   constructor(){
     super();
-    this. _handleChange = this. _handleChange.bind(this)
-    this. _findSelectedValue = this. _findSelectedValue.bind(this)
-    this. _generateOptions = this. _generateOptions.bind(this)
+    this. _handleChange = this. _handleChange.bind(this);
+    this. _findSelectedValue = this. _findSelectedValue.bind(this);
+    this. _generateOptions = this. _generateOptions.bind(this);
   }
 
   render() {
@@ -32,14 +32,29 @@ class Dropdown extends React.Component {
   }
 
   _generateOptions(subjects) {
-    console.log('rerenderd options')
-    console.log('dropdown', subjects.map(function(item){return item.name}))
     return subjects.map(function(item, i) {
       return (
-          <option key={i} value={item.id}> {item.name} </option>
+          <DropdownOption key={i} itemId={item.id} itemName={item.name} />
         );
     });
 
+  }
+
+}
+
+class DropdownOption extends React.Component {
+  constructor() {
+    super();
+  }
+
+  render() {
+    return (
+      <option
+        key={this.props.key}
+        value={this.props.itemId}>
+        {this.props.itemName}
+      </option>
+    );
   }
 
 }

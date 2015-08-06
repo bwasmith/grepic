@@ -67,7 +67,6 @@ class Main extends React.Component{
   }
 
   _handleProjectSelect(e, projectId) {
-    console.log('projectId', projectId)
     helpers.getEpics(projectId, this.state.token)
       .then(function(response) {
         var epics = response.data;
