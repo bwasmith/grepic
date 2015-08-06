@@ -10,7 +10,8 @@ class Dropdown extends React.Component {
   }
 
   render() {
-    var options = this._generateOptions();
+    var subjects = this.props.dropdownItems;
+    var options = this._generateOptions(subjects);
 
     return (
       <select onChange={this._handleChange} ref={'selector'}>
@@ -23,18 +24,22 @@ class Dropdown extends React.Component {
     e.preventDefault();
     var selected = this._findSelectedValue();
     this.props.onDropdownSubmit(e, selected);
+    this.forceUpdate();
   }
 
   _findSelectedValue() {
     return React.findDOMNode(this.refs.selector).value.trim();
   }
 
-  _generateOptions() {
-    return this.props.dropdownItems.map(function(item, i) {
+  _generateOptions(subjects) {
+    console.log('rerenderd options')
+    console.log('dropdown', subjects.map(function(item){return item.name}))
+    return subjects.map(function(item, i) {
       return (
           <option key={i} value={item.id}> {item.name} </option>
         );
     });
+
   }
 
 }

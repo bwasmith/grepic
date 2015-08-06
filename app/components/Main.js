@@ -18,6 +18,7 @@ class Main extends React.Component{
     var refreshToken = this.props.query.refresh_token;
     //error works?
     var error = this.props.query.error;
+    var epics = this.state.epics;
 
     if(error){ alert('There was an error during the authentication'); }
 
@@ -40,7 +41,7 @@ class Main extends React.Component{
             this.state.epics ?
               <Dropdown
                 name={'EpicsDropdown'}
-                dropdownItems={this.state.epics}
+                dropdownItems={epics}
                 onDropdownSubmit={function(){return null;}} /> :
               null
           }
@@ -66,6 +67,7 @@ class Main extends React.Component{
   }
 
   _handleProjectSelect(e, projectId) {
+    console.log('projectId', projectId)
     helpers.getEpics(projectId, this.state.token)
       .then(function(response) {
         var epics = response.data;
