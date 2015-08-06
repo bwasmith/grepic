@@ -1,4 +1,6 @@
 import React from 'react';
+import Dropdown from './Dropdown';
+
 
 class ProjectDropdown extends React.Component {
 
@@ -7,17 +9,10 @@ class ProjectDropdown extends React.Component {
   }
 
   render() {
-    var projectNames = this.props.projectNames.map(function(name) {
-      return (
-          <option>{name}</option>
-        );
-    });
-
-    return (
-      <select>
-        {projectNames}
-      </select>
-    );
+    <Dropdown
+      dropdownItems={this.state.epics}
+      onDropdownSubmit={function(){return null;}} /> :
+    null
   }
 
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { RouteHandler } from 'react-router';
 import TokenForm from './TokenForm';
-import ProjectDropdown from './ProjectDropdown';
+import Dropdown from './Dropdown';
 import helpers from '../utils/helpers';
 
 class Main extends React.Component{
@@ -28,9 +28,21 @@ class Main extends React.Component{
           <TokenForm onTokenSubmit={this._handleTokenSubmit} />
 
           {
-            this.state.token
-              ? <ProjectDropdown projectNames={this.state.projectNames}/>
-              : null
+            this.state.token ?
+              <Dropdown
+                name={'ProjectsDropdown'}
+                dropdownItems={this.state.projects}
+                onDropdownSubmit={this._handleProjectSelect} /> :
+              null
+          }
+
+          {
+            this.state.epics ?
+              <Dropdown
+                name={'EpicsDropdown'}
+                dropdownItems={this.state.epics}
+                onDropdownSubmit={function(){return null;}} /> :
+              null
           }
 
 					<RouteHandler {...this.props} />
@@ -39,23 +51,30 @@ class Main extends React.Component{
 		);
 	}
 
-  _handleTokenSubmit(token){
+  _handleTokenSubmit(token) {
     helpers.getProjectData(token)
-      .then(function(response){
-        var projectNames = response.data.map(function(project) {
-          return project.name;
-        })
+      .then(function(response) {
+        var projects = response.data;
         this.setState({
           token: token,
-          projectNames: projectNames
+          projects: projects,
+          epics: null
         });
       }.bind(this));
+
+
   }
 
-  _handleProjectSelect(e){
-    console.log("PROJECT SELECT EVENT:", e)
-    console.log('selectvalue', this.refs.project.value)
-    console.log('selectvalue DOMNODE', React.findDOMNode(this.refs.project).value)
+  _handleProjectSelect(e, projectId) {
+    helpers.getEpics(projectId, this.state.token)
+      .then(function(response) {
+        var epics = response.data;
+        this.setState({
+          currentProject: projectId,
+          epics: epics
+        });
+      }.bind(this));
+
   }
 };
 
