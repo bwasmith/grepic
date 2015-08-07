@@ -43,7 +43,7 @@ class Dropdown extends React.Component {
   }
 
   _sortStrings(subjects){
-    return subjects.sort(function(a, b) { 
+    return subjects.sort(function(a, b) {
       return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
     });
   }

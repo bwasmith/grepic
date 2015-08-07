@@ -1,0 +1,7 @@
+.btn:focus {
+  outline: none;
+}
+
+.form-group {
+  margin-bottom: 0px;
+}

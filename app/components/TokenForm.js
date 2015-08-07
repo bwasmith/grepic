@@ -1,4 +1,6 @@
 import React from 'react';
+import { Form, ButtonInput, Button, Input } from 'react-bootstrap';
+
 
 class TokenForm extends React.Component {
 
@@ -8,10 +10,22 @@ class TokenForm extends React.Component {
   }
 
   render() {
+    var styles = {
+      form: {
+        width: '250px'
+      },
+      inline: {
+        display: 'inline-block'
+      }
+    }
+
     return (
-      <form className="tokenForm" onSubmit={this._handleSubmit}>
-        <input type="text" placeholder="Your Tracker Token" ref="token" />
-        <input type="submit" value="Post" />
+
+      <form style={styles.form} className="tokenForm" onSubmit={this._handleSubmit}>
+        <div style={styles.inline}>
+          <Input standalone={true} type="text" placeholder="Your Tracker Token" ref="token" className="form-control"/>
+        </div>
+        <Button bsStyle='success' type="submit">submit</Button>
       </form>
     );
   }
