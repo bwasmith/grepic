@@ -3,9 +3,10 @@ import { RouteHandler } from 'react-router';
 import TokenForm from './TokenForm';
 import ProjectDropdown from './ProjectDropdown';
 import EpicDropdown from './EpicDropdown';
-import Contributors from './Contributors';
+import ContributorGrid from './ContributorGrid';
 import helpers from '../utils/helpers';
 import ColorLegend from './ColorLegend';
+import ContributorsDropdown from './ContributorsDropdown';
 
 class Main extends React.Component{
 
@@ -52,23 +53,28 @@ class Main extends React.Component{
             this.state.token ?
               <ProjectDropdown
                 name={'ProjectsDropdown'}
-                projects={this.state.projects}
+                projectsRaw={this.state.projectsRaw}
                 onProjectSelect={this._handleProjectSelect} /> :
               null
           }
 
           {
-            this.state.epics ?
-              <EpicDropdown
-                name={'EpicsDropdown'}
-                epics={this.state.epics}
-                onEpicSelect={this._handleEpicSelect} /> :
+            this.state.epicsRaw ?
+                <EpicDropdown
+                  name={'EpicsDropdown'}
+                  epicsRaw={this.state.epicsRaw}
+                  onEpicSelect={this._handleEpicSelect} /> :
+
               null
           }
 
           {
+
+          }
+
+          {
             this.state.contributors ?
-              <Contributors
+              <ContributorGrid
                 key={this.state.currentEpic}
                 contributors={this.state.contributors}
                 colorFn={this.state.colorFn}
@@ -87,12 +93,12 @@ class Main extends React.Component{
   _handleTokenSubmit(token) {
     helpers.getProjectData(token)
       .then(function(response) {
-        var projects = response.data;
 
+        var projectsRaw = response.data;
         this.setState({
           token: token,
-          projects: projects,
-          epics: null,
+          projectsRaw: projectsRaw,
+          epicsRaw: null,
           contributions: null,
           currentEpic: null,
           currentProject: null
@@ -105,10 +111,10 @@ class Main extends React.Component{
   _handleProjectSelect(e, projectId) {
     helpers.getEpics(projectId, this.state.token)
       .then(function(response) {
-        var epics = response.data;
+        var epicsRaw = response.data;
         this.setState({
           currentProject: projectId,
-          epics: epics,
+          epicsRaw: epicsRaw,
           contributions: null,
           currentEpic: null
         });
@@ -116,7 +122,7 @@ class Main extends React.Component{
   }
 
   _handleEpicSelect(e, epicId) {
-    var currentEpic = this._findEpicName(this.state.epics, epicId)
+    var currentEpic = this._findEpicName(this.state.epicsRaw, epicId)
     helpers.getEpicStories(this.state.currentProject, currentEpic.name, this.state.token)
       .then(function(stories) {
         var epicData = this._processEpicData(stories.data);

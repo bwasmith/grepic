@@ -3,23 +3,14 @@ import Dropdown from './Dropdown';
 
 class EpicDropdown extends React.Component {
 
-  constructor(){
-    super();
-    this. _marshalEpics = this. _marshalEpics.bind(this)
-  }
-
   render() {
-    var epicList = this._marshalEpics();
+    var { epicsRaw, onEpicSelect } = this.props;
 
     return (
       <Dropdown
-      dropdownItems={epicList}
-      onDropdownSelect={this.props.onEpicSelect} />
+        dropdownObjects={epicsRaw}
+        onDropdownSelect={onEpicSelect} />
     );
-  }
-
-  _marshalEpics() {
-    return this.props.epics;
   }
 }
 

@@ -7,16 +7,15 @@ class Dropdown extends React.Component {
     this. _handleChange = this. _handleChange.bind(this);
     this. _findSelectedValue = this. _findSelectedValue.bind(this);
     this. _generateOptions = this. _generateOptions.bind(this);
-    this. _sortStrings = this. _sortStrings.bind(this);
   }
 
   render() {
-    var subjects = this.props.dropdownItems;
+    var { dropdownObjects } = this.props;
 
-    var options = this._generateOptions(subjects);
+    var options = this._generateOptions(dropdownObjects);
 
     return (
-      <select onChange={this._handleChange} ref={'selector'}>
+      <select onChange={this._handleChange} ref={'dropdown'}>
         {options}
       </select>
     );
@@ -29,26 +28,27 @@ class Dropdown extends React.Component {
   }
 
   _findSelectedValue() {
-    return React.findDOMNode(this.refs.selector).value.trim();
+    return React.findDOMNode(this.refs.dropdown).value.trim();
   }
 
-  //subjects is list with [{id: 123, name: Epic}], ...}
-  _generateOptions(subjects) {
-    var sortedSubjects = this._sortStrings(subjects);
-    return sortedSubjects.map(function(item, i) {
+  //dropdownObjects is list with [{id: 123, name: Epic}], ...}
+  _generateOptions(dropdownObjects) {
+    var sortedNames = this._sortObjectNames(dropdownObjects);
+    return sortedNames.map(function(item, i) {
       return (
           <DropdownOption key={i} itemId={item.id} itemName={item.name} />
         );
     });
   }
 
-  _sortStrings(subjects){
-    return subjects.sort(function(a, b) {
+  _sortObjectNames(dropdownObjects){
+    return dropdownObjects.sort(function(a, b) {
       return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
     });
   }
 }
 
+//TODO: undo this class?
 class DropdownOption extends React.Component {
   constructor() {
     super();

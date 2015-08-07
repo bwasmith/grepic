@@ -139,6 +139,7 @@ class ColorLegend extends React.Component{
 
     colorKey[level] = points;
     this.props.onLegendChange(colorKey);
+
     this._setSampleColor(colorKey);
   }
 

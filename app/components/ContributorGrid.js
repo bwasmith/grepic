@@ -3,7 +3,7 @@ import { Grid, Row, Col, Button } from 'react-bootstrap';
 import helpers from '../utils/helpers';
 import InitialsGrid from './InitialsGrid';
 
-class Contributors extends React.Component {
+class ContributorGrid extends React.Component {
 
   constructor(){
     super();
@@ -159,4 +159,4 @@ class ContributionHeader extends React.Component {
   }
 }
 
-export default Contributors;
+export default ContributorGrid;
