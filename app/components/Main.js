@@ -16,13 +16,30 @@ class Main extends React.Component{
     this. _handleEpicSelect = this. _handleEpicSelect.bind(this);
     this. _findElemInArray = this. _findElemInArray.bind(this);
     this. _processContributorResponse = this. _processContributorResponse.bind(this);
-    this. _handleColorLegendChange = this. _handleColorLegendChange.bind(this);
-    this.state = {token: null};
+    this. _handleLegendChange = this. _handleLegendChange.bind(this);
+
+
+    var colorKey = {
+      wandering: 0,
+      comfy: 4,
+      soloReady: 10,
+      architect: 18,
+      anchor: 28
+    };
+
+    this.state = {
+      token: null,
+      colorKey: colorKey ,
+      colorFn: helpers.generateColorFn(colorKey)
+    };
   }
 
   render(){
+    console.log('colorKey', this.state.colorKey);
     //error works?
     var error = this.props.query.error;
+
+
 
     if(error){ alert('There was an error during the authentication'); }
 		return(
@@ -30,7 +47,9 @@ class Main extends React.Component{
 				<div className="container">
 
           <TokenForm onTokenSubmit={this._handleTokenSubmit} />
-          <ColorLegend />
+          <ColorLegend
+            colorKey={this.state.colorKey}
+            onLegendChange={this._handleLegendChange}/>
 
           {
             this.state.token ?
@@ -52,7 +71,12 @@ class Main extends React.Component{
 
           {
             this.state.contributors ?
-              <Contributions key={this.state.currentEpic} contributors={this.state.contributors} /> :
+              <Contributions
+                key={this.state.currentEpic}
+                contributors={this.state.contributors}
+                colorFn={this.state.colorFn}
+                colorKey={this.state.colorKey} /> :
+
               null
           }
 
@@ -179,11 +203,10 @@ class Main extends React.Component{
     })
   }
 
-  _handleColorLegendChange() {
-    console.log('handling color legend change!')
-    var colorFn = helpers.pointsToHue();
+  _handleLegendChange(colorKey) {
     this.setState({
-      colorFn: colorFn
+      colorKey: colorKey,
+      colorFn: helpers.generateColorFn(colorKey)
     })
   }
 };

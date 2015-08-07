@@ -1,5 +1,6 @@
 import React from 'react';
-import { Grid, Row, Col, Button } from 'react-bootstrap'
+import { Grid, Row, Col, Button } from 'react-bootstrap';
+import helpers from '../utils/helpers';
 
 class Contributions extends React.Component {
 
@@ -10,7 +11,7 @@ class Contributions extends React.Component {
     this. _sortContributorsByName = this. _sortContributorsByName.bind(this);
     this. _sortContributorsByPoints = this. _sortContributorsByPoints.bind(this);
     this. _sort = this. _sort.bind(this);
-    this.state = { numberColumns: 4, view: 'contribution', sort: 'points' };
+    this.state = { numberColumns: 4, view: 'initials', sort: 'points' };
   }
 
   render() {
@@ -25,8 +26,7 @@ class Contributions extends React.Component {
         padding: '10px 0px 10px 0px'
       },
       button: {
-        backgroundColor: 'yellow',
-        opacity: 1
+
       }
     };
 
@@ -59,7 +59,7 @@ class Contributions extends React.Component {
 
   _sort(contributorList){
     switch (this.state.sort) {
-      case 'name': 
+      case 'name':
         return this._sortContributorsByName(contributorList);
       case 'points':
         return this._sortContributorsByPoints(contributorList);
@@ -88,15 +88,15 @@ class Contributions extends React.Component {
       return aPoints - bPoints;
     })
   }
-        
+
   _newContributorRow(i, contributor, styles){
     return (
-      <div style={styles.row}>  
+      <div style={styles.row}>
         <Row>
-          <Col md={2}> 
+          <Col md={2}>
             <Button bStyle='primary' disabled={true} style={styles.button}>
-              {contributor.value.initials} 
-            </Button> 
+              {contributor.value.initials}
+            </Button>
           </Col>
           <Col md={2}> {contributor.value.total_points} </Col>
           <Col md={2}> {contributor.value.total_stories} </Col>
@@ -107,22 +107,36 @@ class Contributions extends React.Component {
 
   _newInitialsRow(i, contributorList, styles) {
     var columns = []
-    for (var index = i; index < i + 4; index++){
+    for (var index = i; index < i + this.state.numberColumns; index++){
       if (index >= contributorList.length){
         break;
       }
+      console.log('hello were here before');
+
       var contributorInitials = contributorList[index].value.initials;
+      var contributorPoints = contributorList[index].value.total_points;
+      var contributorColor = helpers.setColor(this.props.colorFn, contributorPoints, this.props.colorKey);
+      console.log(this.props.colorFn)
+      console.log(contributorPoints)
+      console.log(this.props.colorKey)
+      console.log('hello were here');
+
+      var buttonStyle = {
+        backgroundColor: `${contributorColor}`,
+        opacity: 1,
+
+      };
       columns.push(
-        <Col key={contributorInitials} md={2}> 
-          <Button style={styles.button} disabled={true} > 
-            {contributorInitials} 
+        <Col key={contributorInitials} md={2}>
+          <Button style={buttonStyle} disabled={true} >
+            {contributorInitials}
           </Button>
         </Col>
       );
     }
 
     return (
-      <div style={styles.row}>  
+      <div style={styles.row}>
         <Row key={this.state.key}>
           {columns}
         </Row>

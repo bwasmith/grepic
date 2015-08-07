@@ -32,7 +32,7 @@ class TokenForm extends React.Component {
 
   _handleSubmit(e) {
     e.preventDefault();
-    var token = React.findDOMNode(this.refs.token).value.trim();
+    var token = (this.refs.token).getInputDOMNode().value.trim();
     if(!token){
       return;
     }

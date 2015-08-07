@@ -9,19 +9,6 @@ class ColorLegend extends React.Component{
     this. _setSample = this. _setSample.bind(this);
     this. _changeLevelUpVal = this. _changeLevelUpVal.bind(this);
     this. _handleSampleKeyDown = this. _handleSampleKeyDown.bind(this);
-
-    var colorKey = {
-        wandering: 0,
-        comfy: 4,
-        soloReady: 10,
-        architect: 18,
-        anchor: 28
-      };
-    this.state = {
-      colorKey: colorKey ,
-      colorFn: helpers.generateColorFn(colorKey),
-      points: 0
-    };
   }
 
   render() {
@@ -76,33 +63,33 @@ class ColorLegend extends React.Component{
             id={"wandering"}
             color={style.wandering}
             onLegendChange={this._changeLevelUpVal}
-            defaultVal={this.state.colorKey.wandering}
+            defaultVal={this.props.colorKey.wandering}
             topEl={true} />
 
           <LegendItem
             id={"comfy"}
             color={style.comfy}
             onLegendChange={this._changeLevelUpVal}
-            defaultVal={this.state.colorKey.comfy} />
+            defaultVal={this.props.colorKey.comfy} />
 
           <LegendItem
             id={"soloReady"}
             color={style.soloReady}
             onLegendChange={this._changeLevelUpVal}
-            defaultVal={this.state.colorKey.soloReady}
+            defaultVal={this.props.colorKey.soloReady}
             name={"solo ready"} />
 
           <LegendItem
             id={"architect"}
             color={style.architect}
             onLegendChange={this._changeLevelUpVal}
-            defaultVal={this.state.colorKey.architect} />
+            defaultVal={this.props.colorKey.architect} />
 
           <LegendItem
             id={"anchor"}
             color={style.anchor}
             onLegendChange={this._changeLevelUpVal}
-            defaultVal={this.state.colorKey.anchor}
+            defaultVal={this.props.colorKey.anchor}
             bottomEl={true} />
 
           <Input bsSize="large" type="text" ref="sample"
@@ -124,22 +111,18 @@ class ColorLegend extends React.Component{
     var subject = React.findDOMNode(this.refs.sample.getInputDOMNode());
     var points = parseInt(subject.value);
     var sampleButton = React.findDOMNode(this.refs.sampleButton);
-    this.setState({
-      points: points
-    })
-    console.log('hue: f(points):', points, this.state.colorFn(points));
 
-
-    sampleButton.style.backgroundColor = helpers.setColor(this.state.colorFn, points, this.state.colorKey);
+    sampleButton.style.backgroundColor = helpers.setColor(this.state.colorFn, points, this.props.colorKey);
   }
 
   _changeLevelUpVal(e) {
     //TODO: validate key setting by not allowing a value to exceed next value, or to be less than previous value
     var level = e.target.id;
     var points = parseInt(e.target.value);
-    var colorKey = this.state.colorKey;
+    var colorKey = this.props.colorKey;
 
     colorKey[level] = points;
+    this.props.onLegendChange(colorKey);
     this.setState({
       colorKey: colorKey,
       colorFn: helpers.generateColorFn(colorKey)
