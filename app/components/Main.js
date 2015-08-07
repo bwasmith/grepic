@@ -25,7 +25,6 @@ class Main extends React.Component{
     var error = this.props.query.error;
 
     if(error){ alert('There was an error during the authentication'); }
-
 		return(
 			<div className="main-container">
 				<div className="container">

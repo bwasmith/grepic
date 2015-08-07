@@ -20,6 +20,7 @@
     "querystring": "~0.2.0",
     "re-base": "^1.1.1",
     "react": "^0.13.3",
+    "react-bootstrap": "^0.24.3",
     "react-router": "^0.13.3",
     "reactfire": "^0.4.0",
     "request": "~2.34.0",
