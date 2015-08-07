@@ -34,12 +34,8 @@ class Main extends React.Component{
   }
 
   render(){
-    console.log('colorKey', this.state.colorKey);
     //error works?
     var error = this.props.query.error;
-
-console.log('renders: contributors', this.state.contributors)
-
 
     if(error){ alert('There was an error during the authentication'); }
 		return(
@@ -49,6 +45,7 @@ console.log('renders: contributors', this.state.contributors)
           <TokenForm onTokenSubmit={this._handleTokenSubmit} />
           <ColorLegend
             colorKey={this.state.colorKey}
+            colorFn={this.state.colorFn}
             onLegendChange={this._handleLegendChange}/>
 
           {
@@ -209,7 +206,8 @@ console.log('renders: contributors', this.state.contributors)
       }
     }
 
-    console.log(epicContributors)
+    //add coolors to dictionary items
+      //down here becasue you need total point count
 
     return (
       {

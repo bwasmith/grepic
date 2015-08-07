@@ -85,10 +85,10 @@ var helpers = {
       points = colorKey.wandering;
     }
     var hue = colorFn(points);
-    if(hue < ANCHOR){
+    if(hue < ANCHOR || hue > WANDERING){
       console.log(`The color function mapped your ${points} points to a hue
-        less than the anchor color. Your hue was ${hue} so we automatically
-        set it to ${ANCHOR}.`);
+        lower than the anchor color or higher than the wandering color. Your
+        hue was ${hue} so we automatically set it to ${ANCHOR}.`);
       hue = ANCHOR;
     };
     return "hsl(" + hue + ",100%,50%)";

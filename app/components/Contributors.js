@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid, Row, Col, Button } from 'react-bootstrap';
 import helpers from '../utils/helpers';
+import InitialsGrid from './InitialsGrid';
 
 class Contributors extends React.Component {
 
@@ -40,9 +41,13 @@ class Contributors extends React.Component {
     var numContributors = contributorList.length;
 
     if (this.state.view === 'initials') {
-      for (var i = 0; i < numContributors ; i+=this.state.numberColumns) {
-        contributorRows.push(this._newInitialsRow(i, contributorList, styles));
-      };
+      return (
+        <InitialsGrid
+          contributorList={contributorList}
+          colorFn={this.props.colorFn}
+          colorKey={this.props.colorKey} />
+      );
+
     } else if (this.state.view === 'contribution') {
       for (var i = 0; i < numContributors ; i++) {
         contributorRows.push(this._newContributorRow(i, contributorList[i], styles));
@@ -52,7 +57,7 @@ class Contributors extends React.Component {
     return (
       <Grid style={styles.grid}>
         {this.state.view === 'contribution' ? <ContributionHeader /> : null }
-        { contributorRows }
+        { this.state.view === 'contribution' ? contributorRows : this._newInitialsRow() }
       </Grid>
     );
   }
@@ -107,27 +112,14 @@ class Contributors extends React.Component {
 
   _newInitialsRow(i, contributorList, styles) {
     var columns = []
-    for (var index = i; index < i + this.state.numberColumns; index++){
-      if (index >= contributorList.length){
-        break;
-      }
-      console.log('hello were here before');
-
+    for (var index = 0; index < contributorList.length; index++){
       var contributorInitials = contributorList[index].ownerData.initials;
       var contributorPoints = contributorList[index].ownerData.totalPoints;
       var contributorColor = helpers.setColor(this.props.colorFn, contributorPoints, this.props.colorKey);
-      console.log(this.props.colorFn)
-      console.log(contributorPoints)
-      console.log(this.props.colorKey)
-      console.log('hello were here');
 
-      var buttonStyle = {
-        backgroundColor: `${contributorColor}`,
-        opacity: 1,
 
-      };
       columns.push(
-        <Col key={contributorInitials} md={2}>
+        <Col key={contributorInitials} md={4}>
           <Button style={buttonStyle} disabled={true} >
             {contributorInitials}
           </Button>

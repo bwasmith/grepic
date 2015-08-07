@@ -6,7 +6,7 @@ import { Button, Input } from 'react-bootstrap';
 class ColorLegend extends React.Component{
   constructor() {
     super();
-    this. _setSample = this. _setSample.bind(this);
+    this. _setSampleColor = this. _setSampleColor.bind(this);
     this. _changeLevelUpVal = this. _changeLevelUpVal.bind(this);
     this. _handleSampleKeyDown = this. _handleSampleKeyDown.bind(this);
   }
@@ -38,11 +38,14 @@ class ColorLegend extends React.Component{
       sample: {
         button: {
           marginTop: '15px',
-          borderRadius: '10px 0 0 10px'
+          borderRadius: '10px 0 0 10px',
+          fontSize: '18px',
+          width: '110px'
         },
         input: {
           marginTop: '15px',
-          borderRadius: '0 10px 10px 0'
+          borderRadius: '0 10px 10px 0',
+
         }
       },
       help: {
@@ -53,7 +56,13 @@ class ColorLegend extends React.Component{
       }
     };
 
-    var sampleColorButton = <Button style={style.sample.button} ref='sampleButton' onClick={this._setSample}>Calculate!</Button>
+    var sampleColorButton =
+    <Button
+      style={style.sample.button}
+      ref='sampleButton'
+      onClick={this._setSampleColor}>
+      Calculate!
+    </Button>;
 
     return(
       <div style={style.container}>
@@ -107,28 +116,30 @@ class ColorLegend extends React.Component{
     )
   }
 
-  _setSample() {
+  _setSampleColor(colorKey = this.props.colorKey) {
+    //the button onClick will set colorKey to an mouse event instance
+    if(colorKey.type === "click") colorKey = this.props.colorKey;
+
+    var colorFn = helpers.generateColorFn(colorKey);
     var subject = React.findDOMNode(this.refs.sample.getInputDOMNode());
     var points = parseInt(subject.value);
     var sampleButton = React.findDOMNode(this.refs.sampleButton);
 
-    sampleButton.style.backgroundColor = helpers.setColor(this.state.colorFn, points, this.props.colorKey);
+    sampleButton.style.backgroundColor = helpers.setColor(colorFn, points, colorKey);
   }
 
   _changeLevelUpVal(e) {
     //TODO: validate key setting by not allowing a value to exceed next value, or to be less than previous value
     var level = e.target.id;
     var points = parseInt(e.target.value);
+    //when empty, NaN is returned, which is false
+    if(!Number.isInteger(points)) return;
+
     var colorKey = this.props.colorKey;
 
     colorKey[level] = points;
     this.props.onLegendChange(colorKey);
-    this.setState({
-      colorKey: colorKey,
-      colorFn: helpers.generateColorFn(colorKey)
-    });
-
-    console.log('updated colorkey:', this.state.colorKey);
+    this._setSampleColor(colorKey);
   }
 
   _hsl(hue) {
@@ -137,7 +148,7 @@ class ColorLegend extends React.Component{
 
   _handleSampleKeyDown(e) {
     if(e.key === 'Enter') {
-      this._setSample();
+      this._setSampleColor();
     }
     return;
   }
