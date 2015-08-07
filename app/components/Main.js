@@ -3,7 +3,7 @@ import { RouteHandler } from 'react-router';
 import TokenForm from './TokenForm';
 import ProjectDropdown from './ProjectDropdown';
 import EpicDropdown from './EpicDropdown';
-import Contributions from './Contributions';
+import Contributors from './Contributors';
 import helpers from '../utils/helpers';
 import ColorLegend from './ColorLegend';
 
@@ -14,8 +14,7 @@ class Main extends React.Component{
     this. _handleTokenSubmit = this. _handleTokenSubmit.bind(this);
     this. _handleProjectSelect = this. _handleProjectSelect.bind(this);
     this. _handleEpicSelect = this. _handleEpicSelect.bind(this);
-    this. _findElemInArray = this. _findElemInArray.bind(this);
-    this. _processContributorResponse = this. _processContributorResponse.bind(this);
+    this. _processEpicData = this. _processEpicData.bind(this);
     this. _handleLegendChange = this. _handleLegendChange.bind(this);
 
 
@@ -39,6 +38,7 @@ class Main extends React.Component{
     //error works?
     var error = this.props.query.error;
 
+console.log('renders: contributors', this.state.contributors)
 
 
     if(error){ alert('There was an error during the authentication'); }
@@ -71,7 +71,7 @@ class Main extends React.Component{
 
           {
             this.state.contributors ?
-              <Contributions
+              <Contributors
                 key={this.state.currentEpic}
                 contributors={this.state.contributors}
                 colorFn={this.state.colorFn}
@@ -114,26 +114,32 @@ class Main extends React.Component{
           epics: epics,
           contributions: null,
           currentEpic: null
-
         });
       }.bind(this));
   }
 
   _handleEpicSelect(e, epicId) {
-    var currentEpic = this._findElemInArray(this.state.epics, 'id', epicId)
-    helpers.getContributors(this.state.currentProject, currentEpic.name, this.state.token)
-      .then(function(response) {
-        this._processContributorResponse(response.data, epicId);
+    var currentEpic = this._findEpicName(this.state.epics, epicId)
+    helpers.getEpicStories(this.state.currentProject, currentEpic.name, this.state.token)
+      .then(function(stories) {
+        var epicData = this._processEpicData(stories.data);
+
+        this.setState({
+          totalPoints: epicData.totalPoints,
+          totalStories: epicData.totalStories,
+          contributors: epicData.contributors,
+          currentEpic: epicId
+        });
 
       }.bind(this));
   }
 
-  _findElemInArray(arr, attribute, value){
-    var item;
+  _findEpicName(arr, id){
+    var epic;
     for (var i = 0; i < arr.length; i++) {
-      item = arr[i];
-      if (item[attribute] == value) {
-        return item;
+      epic = arr[i];
+      if (epic['id'] == id) {
+        return epic;
       }
     }
     return -1
@@ -150,57 +156,69 @@ class Main extends React.Component{
       ..
     ]
 
-    Returned: [
-      {
-        name:
-        initials:
-        total_stories:
-        total_points:
+    Returned: {
+      contributors:{
+        ownerid: {
+          name:
+          initials:
+          totalStories
+          totalPoints
+        }
+        ...(for n owners)
       }
-      ..
-    ]
+      totalPoints:
+      totalStories:
+    }
+
   */
-  _processContributorResponse(data, epicId){
-    var contributors = {};
+  _processEpicData(stories){
+    var epicContributors = {};
     var epicTotalPoints = 0;
     var epicTotalStories = 0;
 
-    var story, ownerList, owner, story_type, story_points;
-    for (var i = 0; i < data.length; i++){
-      story = data[i];
+    var story, storyOwners, owner, storyType, storyPoints;
+    for (var i = 0; i < stories.length; i++){
+      story = stories[i];
 
       if (story.current_state !== 'accepted') {
         continue;
       }
 
-      ownerList = story.owners;
-      story_type = story.story_type;
-      story_points = story_type === 'feature' ? story.estimate : 1;
-      epicTotalPoints += story_points;
+      //from JSON response
+      storyOwners = story.owners;
+      storyType = story.story_type;
+      storyPoints = story.estimate || 1;
+
+      //our return object
+      epicTotalPoints += storyPoints;
       epicTotalStories += 1;
-      for (var j = 0; j < ownerList.length; j++){
-        owner = ownerList[j];
-        if (contributors[owner.id]) {
-          contributors[owner.id].total_points += story_points;
-          contributors[owner.id].total_stories += 1;
+      for (var j = 0; j < storyOwners.length; j++){
+        owner = storyOwners[j];
+        if (epicContributors[owner.id]) {
+          epicContributors[owner.id].totalPoints += storyPoints;
+          epicContributors[owner.id].totalStories += 1;
         } else {
           var newContributor = {};
-          newContributor.total_stories = 1;
-          newContributor.total_points = story_points;
+          newContributor.totalStories = 1;
+          newContributor.totalPoints = storyPoints;
           newContributor.initials = owner.initials;
           newContributor.name = owner.name;
 
-          contributors[owner.id] = newContributor;
+          epicContributors[owner.id] = newContributor;
         }
       }
     }
 
-    this.setState({
-      totalPoints: epicTotalPoints,
-      totalStories: epicTotalStories,
-      contributors: contributors,
-      currentEpic: epicId
-    })
+    console.log(epicContributors)
+
+    return (
+      {
+        totalPoints: epicTotalPoints,
+        totalStories: epicTotalStories,
+        contributors: epicContributors,
+      }
+    );
+
   }
 
   _handleLegendChange(colorKey) {

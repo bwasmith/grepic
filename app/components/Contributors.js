@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, Row, Col, Button } from 'react-bootstrap';
 import helpers from '../utils/helpers';
 
-class Contributions extends React.Component {
+class Contributors extends React.Component {
 
   constructor(){
     super();
@@ -30,8 +30,8 @@ class Contributions extends React.Component {
       }
     };
 
-    for(var key in contributors) {
-      contributorList.push({key: key, value: contributors[key]} );
+    for(var contributor in contributors) {
+      contributorList.push({ownerId: contributor, ownerData: contributors[contributor]} );
     };
 
     contributorList = this._sort(contributorList);
@@ -71,8 +71,8 @@ class Contributions extends React.Component {
   _sortContributorsByName(contributorList){
     console.log('sorted by name')
     return contributorList.sort(function(a, b) {
-      var aName = a.value.name;
-      var bName = b.value.name;
+      var aName = a.ownerData.name;
+      var bName = b.ownerData.name;
       return aName.toLowerCase() > bName.toLowerCase();
     });
     // return contributorList.sort(function(a, b){
@@ -83,8 +83,8 @@ class Contributions extends React.Component {
   _sortContributorsByPoints(contributorList){
     console.log('sorted by points')
     return contributorList.sort(function(a,b) {
-      var aPoints = a.value.total_points;
-      var bPoints = b.value.total_points;
+      var aPoints = a.ownerData.totalPoints;
+      var bPoints = b.ownerData.totalPoints;
       return aPoints - bPoints;
     })
   }
@@ -95,11 +95,11 @@ class Contributions extends React.Component {
         <Row>
           <Col md={2}>
             <Button bStyle='primary' disabled={true} style={styles.button}>
-              {contributor.value.initials}
+              {contributor.ownerData.initials}
             </Button>
           </Col>
-          <Col md={2}> {contributor.value.total_points} </Col>
-          <Col md={2}> {contributor.value.total_stories} </Col>
+          <Col md={2}> {contributor.ownerData.totalPoints} </Col>
+          <Col md={2}> {contributor.ownerData.totalStories} </Col>
         </Row>
       </div>
     );
@@ -113,8 +113,8 @@ class Contributions extends React.Component {
       }
       console.log('hello were here before');
 
-      var contributorInitials = contributorList[index].value.initials;
-      var contributorPoints = contributorList[index].value.total_points;
+      var contributorInitials = contributorList[index].ownerData.initials;
+      var contributorPoints = contributorList[index].ownerData.totalPoints;
       var contributorColor = helpers.setColor(this.props.colorFn, contributorPoints, this.props.colorKey);
       console.log(this.props.colorFn)
       console.log(contributorPoints)
@@ -137,7 +137,7 @@ class Contributions extends React.Component {
 
     return (
       <div style={styles.row}>
-        <Row key={this.state.key}>
+        <Row key={this.state.ownerId}>
           {columns}
         </Row>
       </div>
@@ -167,4 +167,4 @@ class ContributionHeader extends React.Component {
   }
 }
 
-export default Contributions;
+export default Contributors;
