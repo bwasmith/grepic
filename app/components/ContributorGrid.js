@@ -16,7 +16,7 @@ class ContributorGrid extends React.Component {
   }
 
   render() {
-    var contributors = this.props.contributors;
+    var contributors = this.props.epicContributors;
     var contributorList = [];
 
     var styles = {

@@ -18,7 +18,6 @@ class Main extends React.Component{
     this. _processEpicData = this. _processEpicData.bind(this);
     this. _handleLegendChange = this. _handleLegendChange.bind(this);
 
-
     var colorKey = {
       wandering: 0,
       comfy: 4,
@@ -69,14 +68,19 @@ class Main extends React.Component{
           }
 
           {
+            this.state.contributorsRaw ?
+              <ContributorsDropdown
+                name={'ContributorsDropdown'}
+                contributorsRaw={this.state.contributorsRaw} /> :
 
+                null
           }
 
           {
-            this.state.contributors ?
+            this.state.epicContributors ?
               <ContributorGrid
                 key={this.state.currentEpic}
-                contributors={this.state.contributors}
+                epicContributors={this.state.epicContributors}
                 colorFn={this.state.colorFn}
                 colorKey={this.state.colorKey} /> :
 
@@ -119,6 +123,14 @@ class Main extends React.Component{
           currentEpic: null
         });
       }.bind(this));
+
+    helpers.getContributors(projectId, this.state.token)
+      .then(function(response) {
+        var contributorsRaw = response.data;
+        this.setState({
+          contributorsRaw: contributorsRaw
+        });
+      }.bind(this));
   }
 
   _handleEpicSelect(e, epicId) {
@@ -127,10 +139,12 @@ class Main extends React.Component{
       .then(function(stories) {
         var epicData = this._processEpicData(stories.data);
 
+        console.log(epicData.epicContributors)
+
         this.setState({
           totalPoints: epicData.totalPoints,
           totalStories: epicData.totalStories,
-          contributors: epicData.contributors,
+          epicContributors: epicData.epicContributors,
           currentEpic: epicId
         });
 
@@ -160,7 +174,7 @@ class Main extends React.Component{
     ]
 
     Returned: {
-      contributors:{
+      epicContributors:{
         ownerid: {
           name:
           initials:
@@ -219,7 +233,7 @@ class Main extends React.Component{
       {
         totalPoints: epicTotalPoints,
         totalStories: epicTotalStories,
-        contributors: epicContributors,
+        epicContributors: epicContributors,
       }
     );
 

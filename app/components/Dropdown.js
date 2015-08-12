@@ -31,7 +31,7 @@ class Dropdown extends React.Component {
     return React.findDOMNode(this.refs.dropdown).value.trim();
   }
 
-  //dropdownObjects is list with [{id: 123, name: Epic}], ...}
+  //dropdownObjects is list with [{id: 123, name: Epic}, ...]
   _generateOptions(dropdownObjects) {
     var sortedNames = this._sortObjectNames(dropdownObjects);
     return sortedNames.map(function(item, i) {
