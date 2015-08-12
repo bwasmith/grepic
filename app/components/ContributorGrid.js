@@ -98,13 +98,13 @@ class ContributorGrid extends React.Component {
     return (
       <div style={styles.row}>
         <Row>
-          <Col md={2}>
+          <Col md={1}>
             <Button bStyle='primary' disabled={true} style={styles.button}>
               {contributor.ownerData.initials}
             </Button>
           </Col>
-          <Col md={2}> {contributor.ownerData.totalPoints} </Col>
-          <Col md={2}> {contributor.ownerData.totalStories} </Col>
+          <Col md={1}> {contributor.ownerData.totalPoints} </Col>
+          <Col md={1}> {contributor.ownerData.totalStories} </Col>
         </Row>
       </div>
     );
@@ -119,7 +119,7 @@ class ContributorGrid extends React.Component {
 
 
       columns.push(
-        <Col key={contributorInitials} md={4}>
+        <Col key={contributorInitials} md={1}>
           <Button style={buttonStyle} disabled={true} >
             {contributorInitials}
           </Button>
@@ -151,9 +151,9 @@ class ContributionHeader extends React.Component {
 
     return (
       <Row style={styles.row}>
-        <Col style={styles.col} md={2}>Initials</Col>
-        <Col style={styles.col} md={2}>Total Points</Col>
-        <Col style={styles.col} md={2}>Total Story Count</Col>
+        <Col style={styles.col} md={1}>Initials</Col>
+        <Col style={styles.col} md={1}>Total Points</Col>
+        <Col style={styles.col} md={1}>Total Story Count</Col>
       </Row>
     )
   }

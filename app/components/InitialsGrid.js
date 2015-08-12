@@ -24,13 +24,11 @@ class InitialsGrid extends React.Component{
     }, this);
 
     return (
-      <Grid>
-        <div>
-          <Row>
-            {initialsNodes}
-          </Row>
-        </div>
-      </Grid>
+      <div>
+        <Row>
+          {initialsNodes}
+        </Row>
+      </div>
       )
   }
 }
@@ -38,8 +36,8 @@ class InitialsGrid extends React.Component{
 class ContributorInitials extends React.Component{
   render() {
     return(
-        <Col key={this.props.initials} md={4}>
-          <Button style={this.props.buttonStyle} disabled={true} >
+        <Col key={this.props.initials} md={3}>
+          <Button style={this.props.buttonStyle} >
             {this.props.initials}
           </Button>
         </Col>

@@ -7,6 +7,8 @@ import ContributorGrid from './ContributorGrid';
 import helpers from '../utils/helpers';
 import ColorLegend from './ColorLegend';
 import ContributorsDropdown from './ContributorsDropdown';
+import { Grid, Row, Col, Button } from 'react-bootstrap';
+
 
 class Main extends React.Component{
 
@@ -37,64 +39,97 @@ class Main extends React.Component{
     //error works?
     var error = this.props.query.error;
 
-    // var styles = {
-    //   leftContainer: {
+    var styles = {
+      leftContainer: {
         
-    //   }
-    // }
+      },
+      h1: {
+        fontSize: '30px',
+        fontWeight: 'bold',
+        display: 'block'
+      },
+      h3: {
+        fontSize: '20px',
+        fontWeight: 'bold',
+        display: 'block'
+
+      },
+      header: {
+        float: 'center'
+      },
+      contentRow: {
+        paddingTop: '20px'
+      }
+    }
 
     if(error){ alert('There was an error during the authentication'); }
 		return(
-			<div className="main-container">
-				<div className="container">
+      <div className="main-container">
+        <Grid>
+          <Row>
+            <Col md={3}>
+              <div style={styles.header}>  
+                <span style={styles.h1}> Grepic </span>
+                <span style={styles.h3}> B & D </span>
+              </div>
+            </Col>
+          </Row>  
+          <Row style={styles.contentRow}>
+            <Col  md={3}>
+              <TokenForm onTokenSubmit={this._handleTokenSubmit} />
 
-          <TokenForm onTokenSubmit={this._handleTokenSubmit} />
-          <ColorLegend
-            colorKey={this.state.colorKey}
-            colorFn={this.state.colorFn}
-            onLegendChange={this._handleLegendChange}/>
+              {
+                this.state.token ?
+                  <ProjectDropdown
+                    name={'ProjectsDropdown'}
+                    projectsRaw={this.state.projectsRaw}
+                    onProjectSelect={this._handleProjectSelect} /> :
+                  null
+              }
 
-          {
-            this.state.token ?
-              <ProjectDropdown
-                name={'ProjectsDropdown'}
-                projectsRaw={this.state.projectsRaw}
-                onProjectSelect={this._handleProjectSelect} /> :
-              null
-          }
+              {
+                this.state.epicsRaw ?
+                    <EpicDropdown
+                      name={'EpicsDropdown'}
+                      epicsRaw={this.state.epicsRaw}
+                      onEpicSelect={this._handleEpicSelect} /> :
 
-          {
-            this.state.epicsRaw ?
-                <EpicDropdown
-                  name={'EpicsDropdown'}
-                  epicsRaw={this.state.epicsRaw}
-                  onEpicSelect={this._handleEpicSelect} /> :
+                  null
+              }
 
-              null
-          }
+              {
+                this.state.contributorsRaw ?
+                  <ContributorsDropdown
+                    name={'ContributorsDropdown'}
+                    contributorsRaw={this.state.contributorsRaw} /> :
+                    null
+              }
+            </Col>
 
-          {
-            this.state.contributorsRaw ?
-              <ContributorsDropdown
-                name={'ContributorsDropdown'}
-                contributorsRaw={this.state.contributorsRaw} /> :
+            <Col md={6}>
+              {
+                this.state.epicContributors ?
+                  <ContributorGrid
+                    key={this.state.currentEpic}
+                    epicContributors={this.state.epicContributors}
+                    colorFn={this.state.colorFn}
+                    colorKey={this.state.colorKey} /> :
 
-                null
-          }
+                  null
+              }
+            </Col>
 
-          {
-            this.state.epicContributors ?
-              <ContributorGrid
-                key={this.state.currentEpic}
-                epicContributors={this.state.epicContributors}
-                colorFn={this.state.colorFn}
-                colorKey={this.state.colorKey} /> :
+            <Col  md={3}>
+              <ColorLegend
+                  colorKey={this.state.colorKey}
+                  colorFn={this.state.colorFn}
+                  onLegendChange={this._handleLegendChange}/>
+            </Col>
+          </Row>
+        </Grid>
 
-              null
-          }
 
-          <RouteHandler {...this.props} />
-        </div>
+        <RouteHandler {...this.props} />
       </div>
     );
   }
