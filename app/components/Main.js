@@ -31,7 +31,13 @@ class Main extends React.Component{
     this.state = {
       token: null,
       colorKey: colorKey ,
-      colorFn: helpers.generateColorFn(colorKey)
+      colorFn: helpers.generateColorFn(colorKey),
+      projectsRaw: null,
+      epicsRaw: null,
+      contributorsRaw: null,
+      contributions: null,
+      currentEpic: null,
+      currentProject: null
     };
   }
 
@@ -62,6 +68,10 @@ class Main extends React.Component{
       }
     }
 
+    var projectsDisabled = this.state.projectsRaw === null;
+    var epicsDisabled = this.state.epicsRaw === null;
+    var contributorsDisabled = this.state.contributorsRaw === null;
+
     if(error){ alert('There was an error during the authentication'); }
 		return(
       <div className="main-container">
@@ -78,39 +88,32 @@ class Main extends React.Component{
             <Col  md={3}>
               <TokenForm onTokenSubmit={this._handleTokenSubmit} />
 
-              {
-                this.state.token ?
-                  <ProjectDropdown
+              <ProjectDropdown
+                    key={this.state.token}
                     name={'ProjectsDropdown'}
                     projectsRaw={this.state.projectsRaw}
-                    onProjectSelect={this._handleProjectSelect} /> :
-                  null
-              }
+                    onProjectSelect={this._handleProjectSelect}
+                    disabled={projectsDisabled} />
 
-              {
-                this.state.epicsRaw ?
-                    <EpicDropdown
-                      name={'EpicsDropdown'}
-                      epicsRaw={this.state.epicsRaw}
-                      onEpicSelect={this._handleEpicSelect} /> :
+              <EpicDropdown
+                key={this.state.currentProject+1}
+                name={'EpicsDropdown'}
+                epicsRaw={this.state.epicsRaw}
+                onEpicSelect={this._handleEpicSelect} 
+                disabled={epicsDisabled}/> 
 
-                  null
-              }
-
-              {
-                this.state.contributorsRaw ?
-                  <ContributorsDropdown
-                    name={'ContributorsDropdown'}
-                    contributorsRaw={this.state.contributorsRaw} /> :
-                    null
-              }
+              <ContributorsDropdown
+                key={this.state.currentProject+2}
+                name={'ContributorsDropdown'}
+                contributorsRaw={this.state.contributorsRaw} 
+                disabled={contributorsDisabled} />
             </Col>
 
             <Col md={6}>
               {
                 this.state.epicContributors ?
                   <ContributorGrid
-                    key={this.state.currentEpic}
+                    key={this.state.currentEpic+3}
                     epicContributors={this.state.epicContributors}
                     colorFn={this.state.colorFn}
                     colorKey={this.state.colorKey} /> :
@@ -180,7 +183,7 @@ class Main extends React.Component{
       .then(function(stories) {
         var epicData = this._processEpicData(stories.data);
 
-        console.log(epicData.epicContributors)
+        // console.log(epicData.epicContributors)
 
         this.setState({
           totalPoints: epicData.totalPoints,

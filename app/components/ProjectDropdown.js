@@ -15,7 +15,8 @@ class ProjectDropdown extends React.Component {
       <Dropdown
         label="Projects"
         dropdownObjects={projectsRaw}
-        onDropdownSelect={this.props.onProjectSelect} />
+        onDropdownSelect={this.props.onProjectSelect}
+        disabled={this.props.disabled} />
     );
   }
 }

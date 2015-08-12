@@ -74,7 +74,6 @@ class ContributorGrid extends React.Component {
   }
 
   _sortContributorsByName(contributorList){
-    console.log('sorted by name')
     return contributorList.sort(function(a, b) {
       var aName = a.ownerData.name;
       var bName = b.ownerData.name;
@@ -86,7 +85,6 @@ class ContributorGrid extends React.Component {
   }
 
   _sortContributorsByPoints(contributorList){
-    console.log('sorted by points')
     return contributorList.sort(function(a,b) {
       var aPoints = a.ownerData.totalPoints;
       var bPoints = b.ownerData.totalPoints;

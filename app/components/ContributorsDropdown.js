@@ -5,18 +5,23 @@ class ContributorsDropdown extends React.Component{
   render() {
     var { contributorsRaw } = this.props;
     var contributorsData = this._processContributorsRaw(contributorsRaw);
-    console.log(contributorsData)
+    // console.log(contributorsData)
 
     return(
       <Dropdown
         label="Contributors"
         dropdownObjects={contributorsData}
-        onDropdownSelect={function(){console.log('selected!')}} />
+        onDropdownSelect={function(){console.log('selected!')}} 
+        disabled={this.props.disabled} />
     )
   }
 
   _processContributorsRaw(contributorsRaw) {
-    console.log('mappin!')
+    // console.log('mappin!')
+    if (contributorsRaw === null) {
+      return [];
+    }
+
     return contributorsRaw.map(function(json) {
       return(
         json.person

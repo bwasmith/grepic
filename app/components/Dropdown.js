@@ -12,7 +12,6 @@ class Dropdown extends React.Component {
 
   render() {
     var { dropdownObjects } = this.props;
-
     var options = this._generateOptions(dropdownObjects);
     return (
       <form>
@@ -20,7 +19,8 @@ class Dropdown extends React.Component {
           type='select' 
           label={this.props.label} 
           onChange={this._handleChange} 
-          ref={'dropdown'}>
+          ref={'dropdown'}
+          disabled={this.props.disabled}>
           <option> ... </option>
           {options}
         </Input>
@@ -36,6 +36,10 @@ class Dropdown extends React.Component {
 
   //dropdownObjects is list with [{id: 123, name: Epic}, ...]
   _generateOptions(dropdownObjects) {
+    if (dropdownObjects === null){
+      return [];
+    }
+
     var sortedNames = this._sortObjectNames(dropdownObjects);
     return sortedNames.map(function(item, i) {
       return (
