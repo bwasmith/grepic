@@ -1,11 +1,12 @@
 import React from 'react';
+import { Input } from 'react-bootstrap';
+
 
 class Dropdown extends React.Component {
 
   constructor(){
     super();
     this. _handleChange = this. _handleChange.bind(this);
-    this. _findSelectedValue = this. _findSelectedValue.bind(this);
     this. _generateOptions = this. _generateOptions.bind(this);
   }
 
@@ -13,22 +14,24 @@ class Dropdown extends React.Component {
     var { dropdownObjects } = this.props;
 
     var options = this._generateOptions(dropdownObjects);
-
     return (
-      <select onChange={this._handleChange} ref={'dropdown'}>
-        {options}
-      </select>
+      <form>
+        <Input 
+          type='select' 
+          label={this.props.label} 
+          onChange={this._handleChange} 
+          ref={'dropdown'}>
+          <option> ... </option>
+          {options}
+        </Input>
+      </form>
     );
   }
 
   _handleChange(e) {
     e.preventDefault();
-    var selected = this._findSelectedValue();
+    var selected = this.refs.dropdown.getValue();
     this.props.onDropdownSelect(e, selected);
-  }
-
-  _findSelectedValue() {
-    return React.findDOMNode(this.refs.dropdown).value.trim();
   }
 
   //dropdownObjects is list with [{id: 123, name: Epic}, ...]
@@ -36,7 +39,7 @@ class Dropdown extends React.Component {
     var sortedNames = this._sortObjectNames(dropdownObjects);
     return sortedNames.map(function(item, i) {
       return (
-          <DropdownOption key={i} itemId={item.id} itemName={item.name} />
+          <option key={i} value={item.id}> {item.name} </option>
         );
     });
   }
@@ -46,24 +49,6 @@ class Dropdown extends React.Component {
       return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
     });
   }
-}
-
-//TODO: undo this class?
-class DropdownOption extends React.Component {
-  constructor() {
-    super();
-  }
-
-  render() {
-    return (
-      <option
-        key={this.props.key}
-        value={this.props.itemId}>
-        {this.props.itemName}
-      </option>
-    );
-  }
-
 }
 
 export default Dropdown;

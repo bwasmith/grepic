@@ -8,6 +8,7 @@ class EpicDropdown extends React.Component {
 
     return (
       <Dropdown
+        label="Epics"
         dropdownObjects={epicsRaw}
         onDropdownSelect={onEpicSelect} />
     );

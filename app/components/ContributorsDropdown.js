@@ -9,6 +9,7 @@ class ContributorsDropdown extends React.Component{
 
     return(
       <Dropdown
+        label="Contributors"
         dropdownObjects={contributorsData}
         onDropdownSelect={function(){console.log('selected!')}} />
     )

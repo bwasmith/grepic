@@ -37,6 +37,12 @@ class Main extends React.Component{
     //error works?
     var error = this.props.query.error;
 
+    // var styles = {
+    //   leftContainer: {
+        
+    //   }
+    // }
+
     if(error){ alert('There was an error during the authentication'); }
 		return(
 			<div className="main-container">

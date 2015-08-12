@@ -13,6 +13,7 @@ class ProjectDropdown extends React.Component {
 
     return (
       <Dropdown
+        label="Projects"
         dropdownObjects={projectsRaw}
         onDropdownSelect={this.props.onProjectSelect} />
     );
