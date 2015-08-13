@@ -19,6 +19,7 @@ class Main extends React.Component{
     this. _handleEpicSelect = this. _handleEpicSelect.bind(this);
     this. _processEpicData = this. _processEpicData.bind(this);
     this. _handleLegendChange = this. _handleLegendChange.bind(this);
+    this. _handleContributorSelect = this. _handleContributorSelect.bind(this);
 
     var colorKey = {
       wandering: 0,
@@ -47,7 +48,7 @@ class Main extends React.Component{
 
     var styles = {
       leftContainer: {
-        
+
       },
       h1: {
         fontSize: '30px',
@@ -78,12 +79,12 @@ class Main extends React.Component{
         <Grid>
           <Row>
             <Col md={3}>
-              <div style={styles.header}>  
+              <div style={styles.header}>
                 <span style={styles.h1}> Grepic </span>
                 <span style={styles.h3}> B & D </span>
               </div>
             </Col>
-          </Row>  
+          </Row>
           <Row style={styles.contentRow}>
             <Col  md={3}>
               <TokenForm onTokenSubmit={this._handleTokenSubmit} />
@@ -99,13 +100,14 @@ class Main extends React.Component{
                 key={this.state.currentProject+1}
                 name={'EpicsDropdown'}
                 epicsRaw={this.state.epicsRaw}
-                onEpicSelect={this._handleEpicSelect} 
-                disabled={epicsDisabled}/> 
+                onEpicSelect={this._handleEpicSelect}
+                disabled={epicsDisabled}/>
 
               <ContributorsDropdown
                 key={this.state.currentProject+2}
                 name={'ContributorsDropdown'}
-                contributorsRaw={this.state.contributorsRaw} 
+                contributorsRaw={this.state.contributorsRaw}
+                onContributorSelect={this._handleContributorSelect}
                 disabled={contributorsDisabled} />
             </Col>
 
@@ -117,6 +119,13 @@ class Main extends React.Component{
                     epicContributors={this.state.epicContributors}
                     colorFn={this.state.colorFn}
                     colorKey={this.state.colorKey} /> :
+
+                  null
+              }
+
+              {
+                this.state.contributorEpics ?
+                  <div>YOU GOT ME!</div> :
 
                   null
               }
@@ -178,7 +187,7 @@ class Main extends React.Component{
   }
 
   _handleEpicSelect(e, epicId) {
-    var currentEpic = this._findEpicName(this.state.epicsRaw, epicId)
+    var currentEpic = this._findEpicName(this.state.epicsRaw, epicId);
     helpers.getEpicStories(this.state.currentProject, currentEpic.name, this.state.token)
       .then(function(stories) {
         var epicData = this._processEpicData(stories.data);
@@ -288,6 +297,18 @@ class Main extends React.Component{
       colorKey: colorKey,
       colorFn: helpers.generateColorFn(colorKey)
     })
+  }
+
+  _handleContributorSelect(e, contributorId) {
+    helpers.getEpicsForContributor(this.state.currentProject, contributorId, this.state.token)
+      .then(function(response){
+        console.log(response)
+      });
+    this.setState({
+      contributorEpics: true
+    });
+    console.log('e', e)
+    console.log('contributor', contributorId)
   }
 };
 

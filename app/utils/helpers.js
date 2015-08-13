@@ -76,6 +76,14 @@ var helpers = {
     })
   },
 
+  getEpicsForContributor: function(project, contributorId, token) {
+    return axios.get(`https://www.pivotaltracker.com/services/v5/projects/${project}/search?query=owner:${contributorId}%20includedone:true`, {
+      headers: {
+        'X-TrackerToken': token
+      }
+    })
+  },
+
   generateColorFn: function(dict) {
     var f = interpolatingPolynomial([[dict.wandering, WANDERING],
                                      [dict.comfy, COMFY],
