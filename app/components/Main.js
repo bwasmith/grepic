@@ -187,11 +187,10 @@ class Main extends React.Component{
   }
 
   _handleEpicSelect(e, epicId) {
-    var currentEpic = this._findEpicName(this.state.epicsRaw, epicId);
-    helpers.getEpicStories(this.state.currentProject, currentEpic.name, this.state.token)
+    var currentEpic = this._findEpicById(this.state.epicsRaw, epicId);
+    helpers.getEpicStoriesByLabel(this.state.currentProject, currentEpic.label.name, this.state.token)
       .then(function(stories) {
         var epicData = this._processEpicData(stories.data);
-
         // console.log(epicData.epicContributors)
 
         this.setState({
@@ -204,7 +203,7 @@ class Main extends React.Component{
       }.bind(this));
   }
 
-  _findEpicName(arr, id){
+  _findEpicById(arr, id){
     var epic;
     for (var i = 0; i < arr.length; i++) {
       epic = arr[i];
