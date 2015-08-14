@@ -1,4 +1,6 @@
 import React from 'react';
+import EpicNode from './EpicNode';
+import { Row } from 'react-bootstrap';
 
 class EpicsGrid extends React.Component {
   constructor() {
@@ -8,48 +10,39 @@ class EpicsGrid extends React.Component {
   }
 
   componentWillMount() {
-    var { stories, total_hits, total_hits_with_done, total_points_completed } = this.props.contributorStoriesRaw;
-
-    var epicHash = this._processStoriesData(stories);
-
-    this.setState({
-      doneStories: (total_hits_with_done - total_hits),
-      donePoints: total_points_completed,
-      processedEpicData: epicHash
-    })
-    console.log('recursive!!!!')
+    this._init(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    var { stories, total_hits, total_hits_with_done, total_points_completed } = nextProps.contributorStoriesRaw;
-    console.log('stories in receive props', stories)
-
-    var epicHash = this._processStoriesData(stories);
-    console.log('before setState', epicHash)
-
-    this.setState({
-      doneStories: (total_hits_with_done - total_hits),
-      donePoints: total_points_completed,
-      processedEpicData: epicHash
-    })
-    console.log('recursive!!!!')
+    this._init(nextProps);
   }
 
   render() {
-    console.log('got here')
-    console.log('in render, state:', this.state.processedEpicData)
+    var { sortedEpicKeys, processedEpicData } = this.state;
 
-    // var epicNodes = this.state.processedEpicData.map(function(epic) {
-    //   return(
-    //     <EpicNode
-    //       name={epic.name}
-    //       nodeStyle={epic.color} />
-    //   )
-    // });
+    var count = 0;
+    var epicObject;
+
+    var epicNodes =
+      sortedEpicKeys.map(function(labelName){
+        epicObject = processedEpicData[labelName];
+
+        return(
+          <EpicNode
+            key={count++}
+            name={labelName}
+            points={epicObject.donePoints}
+            stories={epicObject.doneStories}
+            colorKey={this.props.colorKey}
+            colorFn={this.props.colorFn} />
+        );
+    }, this);
 
     return(
       <div className="epicsGrid">
-        {this.state.processedEpicData}
+        <Row>
+          {epicNodes}
+        </Row>
       </div>
     );
   }
@@ -58,7 +51,9 @@ class EpicsGrid extends React.Component {
     var epicHash = {};
 
     stories.map(function(story){
-      var estimate = story.estimate || 0;
+      //counting 0 point features as 1 point here, can change that.
+      var estimate = story.estimate || 1;
+
       if(estimate < 0) {
         alert('apparently estimates can be negative, fix _processStoriesData in EpicsGrid');
         console.log(story);
@@ -81,7 +76,32 @@ class EpicsGrid extends React.Component {
         epicHash[labelName].donePoints += estimate;
       };
     });
-    return epicHash;
+
+    var sortedEpicKeys = this._sortEpicKeysByPoints(epicHash);
+    return {
+      epicHash: epicHash,
+      sortedEpicKeys: sortedEpicKeys
+    };
+  }
+
+  _sortEpicKeysByPoints(epicHash) {
+    var sortedEpicKeys =
+      Object.keys(epicHash)
+        .sort(function(a, b) {
+          return epicHash[b].donePoints - epicHash[a].donePoints;
+        });
+    return sortedEpicKeys;
+  }
+
+  _init(props) {
+    var { stories, total_hits, total_hits_with_done, total_points_completed } = props.contributorStoriesRaw;
+    var { epicHash, sortedEpicKeys } = this._processStoriesData(stories);
+    this.setState({
+      doneStories: (total_hits_with_done - total_hits),
+      donePoints: total_points_completed,
+      processedEpicData: epicHash,
+      sortedEpicKeys: sortedEpicKeys
+    })
   }
 }
 

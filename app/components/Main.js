@@ -127,7 +127,9 @@ class Main extends React.Component{
                 this.state.contributorStoriesRaw ?
                   <EpicsGrid
                     key={this.state.currentContributor}
-                    contributorStoriesRaw={this.state.contributorStoriesRaw} /> :
+                    contributorStoriesRaw={this.state.contributorStoriesRaw}
+                    colorKey={this.state.colorKey}
+                    colorFn={this.state.colorFn} /> :
 
                   null
               }

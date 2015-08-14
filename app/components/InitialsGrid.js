@@ -17,7 +17,6 @@ class InitialsGrid extends React.Component{
           contributorColor={contributorColor}/>
       )
     }, this);
-
     return (
       <div>
         <Row>
