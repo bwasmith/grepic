@@ -7,7 +7,6 @@ class ContributorGrid extends React.Component {
 
   constructor(){
     super();
-    this. _newInitialsRow = this. _newInitialsRow.bind(this);
     this. _newContributorRow = this. _newContributorRow.bind(this);
     this. _sortContributorsByName = this. _sortContributorsByName.bind(this);
     this. _sortContributorsByPoints = this. _sortContributorsByPoints.bind(this);
@@ -60,8 +59,8 @@ class ContributorGrid extends React.Component {
 
     return (
       <Grid style={styles.grid}>
-        {this.state.view === 'contribution' ? <ContributionHeader /> : null }
-        { this.state.view === 'contribution' ? contributorRows : this._newInitialsRow() }
+        <ContributionHeader />
+        {contributorRows}
       </Grid>
     );
   }
@@ -111,33 +110,6 @@ class ContributorGrid extends React.Component {
       </div>
     );
   }
-
-  _newInitialsRow(i, contributorList, styles) {
-    var columns = []
-    for (var index = 0; index < contributorList.length; index++){
-      var contributorInitials = contributorList[index].ownerData.initials;
-      var contributorPoints = contributorList[index].ownerData.totalPoints;
-      var contributorColor = helpers.setColor(this.props.colorFn, contributorPoints, this.props.colorKey);
-
-
-      columns.push(
-        <Col key={contributorInitials} md={1}>
-          <Button style={buttonStyle} disabled={true} >
-            {contributorInitials}
-          </Button>
-        </Col>
-      );
-    }
-
-    return (
-      <div style={styles.row}>
-        <Row key={this.state.ownerId}>
-          {columns}
-        </Row>
-      </div>
-    );
-  }
-
 }
 
 class ContributionHeader extends React.Component {
