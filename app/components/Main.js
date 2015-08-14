@@ -287,7 +287,7 @@ class Main extends React.Component{
         }
 
         var storyTypeCount = epicContributors[owner.id][storyType+'Count'];
-        epicContributors[owner.id][storyType+'Count'] = storyTypeCount ? storyTypeCount + 1 : 1; 
+        epicContributors[owner.id][storyType+'Count'] = storyTypeCount ? storyTypeCount + 1 : 1;
       }
     }
 
@@ -316,7 +316,7 @@ class Main extends React.Component{
       .then(function(response){
         this.setState({
           contributorStoriesRaw: response.data.stories,
-          currentContributor: contributorId
+          currentContributor: contributorId,
         });
       }.bind(this));
   }

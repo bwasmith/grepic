@@ -15,10 +15,10 @@ class Dropdown extends React.Component {
     var options = this._generateOptions(dropdownObjects);
     return (
       <form>
-        <Input 
-          type='select' 
-          label={this.props.label} 
-          onChange={this._handleChange} 
+        <Input
+          type='select'
+          label={this.props.label}
+          onChange={this._handleChange}
           ref={'dropdown'}
           disabled={this.props.disabled}>
           <option> ... </option>

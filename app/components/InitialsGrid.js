@@ -56,7 +56,7 @@ class ContributorInitials extends React.Component{
     }
     var storyTypes = ['feature','chore', 'bug'];
 
-    var overlay = <Popover title={name}> 
+    var overlay = <Popover title={name}>
                     {`Total Pseudo Points: ${totalPoints}\n`} <br/>
                     {`Total Stories: ${totalStories}`} <br/>
                     {contributor.ownerData['featureCount'] !== undefined ? `features: ${contributor.ownerData['featureCount']} ` : null}
@@ -64,7 +64,7 @@ class ContributorInitials extends React.Component{
                     {contributor.ownerData['choreCount'] !== undefined ? `chores: ${contributor.ownerData['choreCount']} ` : null}
                     </Popover>
 
-                    
+
     return(
         <Col key={initials} style={styles.column} md={3}>
           <OverlayTrigger trigger='click' placement='right' overlay={overlay}>
