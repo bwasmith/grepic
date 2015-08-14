@@ -1,3 +1,4 @@
+// TODO: clear currentEpic, currentProject, currentContributor when new thing is selected on dropdowns
 import React from 'react';
 import { RouteHandler } from 'react-router';
 import TokenForm from './TokenForm';
@@ -7,6 +8,7 @@ import ContributorGrid from './ContributorGrid';
 import helpers from '../utils/helpers';
 import ColorLegend from './ColorLegend';
 import ContributorsDropdown from './ContributorsDropdown';
+import EpicsGrid from './EpicsGrid';
 import { Grid, Row, Col, Button } from 'react-bootstrap';
 
 
@@ -124,8 +126,10 @@ class Main extends React.Component{
               }
 
               {
-                this.state.contributorEpics ?
-                  <div>YOU GOT ME!</div> :
+                this.state.contributorStoriesRaw ?
+                  <EpicsGrid
+                    key={this.state.currentContributor}
+                    contributorStoriesRaw={this.state.contributorStoriesRaw} /> :
 
                   null
               }
@@ -191,8 +195,6 @@ class Main extends React.Component{
     helpers.getEpicStories(this.state.currentProject, currentEpic.name, this.state.token)
       .then(function(stories) {
         var epicData = this._processEpicData(stories.data);
-
-        // console.log(epicData.epicContributors)
 
         this.setState({
           totalPoints: epicData.totalPoints,
@@ -302,13 +304,11 @@ class Main extends React.Component{
   _handleContributorSelect(e, contributorId) {
     helpers.getEpicsForContributor(this.state.currentProject, contributorId, this.state.token)
       .then(function(response){
-        console.log(response)
-      });
-    this.setState({
-      contributorEpics: true
-    });
-    console.log('e', e)
-    console.log('contributor', contributorId)
+        this.setState({
+          contributorStoriesRaw: response.data.stories,
+          currentContributor: contributorId
+        });
+      }.bind(this));
   }
 };
 
