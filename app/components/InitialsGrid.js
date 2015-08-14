@@ -10,16 +10,11 @@ class InitialsGrid extends React.Component{
       var points = contributor.ownerData.totalPoints;
       var contributorColor = helpers.setColor(this.props.colorFn, points, this.props.colorKey);
 
-      var buttonStyle = {
-        backgroundColor: `${contributorColor}`,
-        opacity: 1,
-      };
-
       return (
         <ContributorInitials
           key={initials}
           initials={initials}
-          buttonStyle={buttonStyle} />
+          contributorColor={contributorColor}/>
       )
     }, this);
 
@@ -35,9 +30,21 @@ class InitialsGrid extends React.Component{
 
 class ContributorInitials extends React.Component{
   render() {
+
+    var styles = {
+      button: {
+          backgroundColor: `${this.props.contributorColor}`,
+          opacity: 1,
+          marginLeft: '30%',
+          padding: '10px'
+        },
+        column: {
+          paddingBottom: '20px'
+        }
+    }
     return(
-        <Col key={this.props.initials} md={3}>
-          <Button style={this.props.buttonStyle} >
+        <Col key={this.props.initials} style={styles.column} md={3}>
+          <Button style={styles.button}>
             {this.props.initials}
           </Button>
         </Col>
