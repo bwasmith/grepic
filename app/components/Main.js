@@ -61,8 +61,8 @@ class Main extends React.Component{
       h3: {
         fontSize: '20px',
         fontWeight: 'bold',
-        display: 'block'
-
+        display: 'block',
+        paddingBottom: '3px'
       },
       header: {
         float: 'center'
@@ -84,14 +84,16 @@ class Main extends React.Component{
           <Row>
             <Col md={3}>
               <div style={styles.header}>
-                <span style={styles.h1}> Grepic </span>
+                <span style={styles.h1}> grEpic </span>
                 <span style={styles.h3}> B & D </span>
+                <a href='https://github.com/bwasmith/grepic'> Github </a>
               </div>
             </Col>
           </Row>
           <Row style={styles.contentRow}>
             <Col  md={3}>
               <TokenForm onTokenSubmit={this._handleTokenSubmit} />
+              <br/>
 
               <ProjectDropdown
                     key={this.state.token}
@@ -99,6 +101,7 @@ class Main extends React.Component{
                     projectsRaw={this.state.projectsRaw}
                     onProjectSelect={this._handleProjectSelect}
                     disabled={projectsDisabled} />
+              <br/>
 
               <EpicDropdown
                 key={this.state.currentProject+1}
@@ -106,6 +109,7 @@ class Main extends React.Component{
                 epicsRaw={this.state.epicsRaw}
                 onEpicSelect={this._handleEpicSelect}
                 disabled={epicsDisabled}/>
+              <br/>
 
               <ContributorsDropdown
                 key={this.state.currentProject+2}

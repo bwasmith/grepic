@@ -44,7 +44,10 @@ class ContributorInitials extends React.Component{
       button: {
           backgroundColor: `${this.props.contributorColor}`,
           opacity: 1,
-          marginLeft: '30%',
+          marginLeft: '40%',
+          width: '70px',
+          height: '70px',
+          fontSize: '20px'
         },
         column: {
           paddingBottom: '30px'

@@ -16,8 +16,12 @@ class EpicNode extends React.Component{
       backgroundColor: `${buttonColor}`
     }
 
+    var colStyle = {
+      paddingBottom: '25px'
+    }
+
     return(
-      <Col key={this.props.name} md={4}>
+      <Col style={colStyle}key={this.props.name} md={4}>
         <Button style={buttonStyle} >
           {this.props.name}
         </Button>
