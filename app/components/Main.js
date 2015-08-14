@@ -281,6 +281,9 @@ class Main extends React.Component{
 
           epicContributors[owner.id] = newContributor;
         }
+
+        var storyTypeCount = epicContributors[owner.id][storyType+'Count'];
+        epicContributors[owner.id][storyType+'Count'] = storyTypeCount ? storyTypeCount + 1 : 1; 
       }
     }
 
