@@ -16,6 +16,10 @@ class ContributorGrid extends React.Component {
   }
 
   render() {
+    if (!this.props.showContributors){
+      return (<div/>);
+    }
+
     var contributors = this.props.epicContributors;
     var contributorList = [];
 
