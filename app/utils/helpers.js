@@ -53,7 +53,7 @@ var helpers = {
   },
 
   getEpics: function(project, token) {
-    return axios.get(`https://www.pivotaltracker.com/services/v5/projects/${project}/epics?fields=name`, {
+    return axios.get(`https://www.pivotaltracker.com/services/v5/projects/${project}/epics?fields=name,label`, {
       headers: {
         'X-TrackerToken': token
       }
@@ -68,8 +68,8 @@ var helpers = {
     })
   },
 
-  getEpicStories: function(project, epicName, token) {
-    return axios.get(`https://www.pivotaltracker.com/services/v5/projects/${project}/stories?with_label=${epicName}&fields=owners,story_type,estimate,current_state`, {
+  getEpicStoriesByLabel: function(project, labelName, token) {
+    return axios.get(`https://www.pivotaltracker.com/services/v5/projects/${project}/stories?with_label=${labelName}&fields=owners,story_type,estimate,current_state`, {
       headers: {
         'X-TrackerToken': token
       }

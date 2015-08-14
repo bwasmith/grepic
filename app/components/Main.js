@@ -36,11 +36,12 @@ class Main extends React.Component{
       colorKey: colorKey ,
       colorFn: helpers.generateColorFn(colorKey),
       projectsRaw: null,
+      currentProject: null,
       epicsRaw: null,
-      contributorsRaw: null,
-      contributions: null,
       currentEpic: null,
-      currentProject: null
+      contributions: null,
+      contributorsRaw: null,
+      epicContributors: null
     };
   }
 
@@ -74,6 +75,7 @@ class Main extends React.Component{
     var projectsDisabled = this.state.projectsRaw === null;
     var epicsDisabled = this.state.epicsRaw === null;
     var contributorsDisabled = this.state.contributorsRaw === null;
+    var showContributors = !(this.state.epicContributors === {} || this.state.epicContributors === null)
 
     if(error){ alert('There was an error during the authentication'); }
 		return(
@@ -114,16 +116,12 @@ class Main extends React.Component{
             </Col>
 
             <Col md={6}>
-              {
-                this.state.epicContributors ?
-                  <ContributorGrid
-                    key={this.state.currentEpic+3}
-                    epicContributors={this.state.epicContributors}
-                    colorFn={this.state.colorFn}
-                    colorKey={this.state.colorKey} /> :
-
-                  null
-              }
+              <ContributorGrid
+                key={this.state.currentEpic+3}
+                epicContributors={this.state.epicContributors}
+                colorFn={this.state.colorFn}
+                colorKey={this.state.colorKey}
+                showContributors={showContributors}/>
 
               {
                 this.state.contributorStoriesRaw ?
@@ -162,7 +160,9 @@ class Main extends React.Component{
           epicsRaw: null,
           contributions: null,
           currentEpic: null,
-          currentProject: null
+          currentProject: null,
+          contributorsRaw: null,
+          epicContributors: null
         });
       }.bind(this));
 
@@ -177,7 +177,8 @@ class Main extends React.Component{
           currentProject: projectId,
           epicsRaw: epicsRaw,
           contributions: null,
-          currentEpic: null
+          currentEpic: null,
+          epicContributors: null
         });
       }.bind(this));
 
@@ -191,8 +192,8 @@ class Main extends React.Component{
   }
 
   _handleEpicSelect(e, epicId) {
-    var currentEpic = this._findEpicName(this.state.epicsRaw, epicId);
-    helpers.getEpicStories(this.state.currentProject, currentEpic.name, this.state.token)
+    var currentEpic = this._findEpicById(this.state.epicsRaw, epicId);
+    helpers.getEpicStoriesByLabel(this.state.currentProject, currentEpic.label.name, this.state.token)
       .then(function(stories) {
         var epicData = this._processEpicData(stories.data);
 
@@ -206,7 +207,7 @@ class Main extends React.Component{
       }.bind(this));
   }
 
-  _findEpicName(arr, id){
+  _findEpicById(arr, id){
     var epic;
     for (var i = 0; i < arr.length; i++) {
       epic = arr[i];
