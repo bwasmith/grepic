@@ -6,14 +6,17 @@ class InitialsGrid extends React.Component{
   render(){
     var contributorList = this.props.contributorList
     var initialsNodes = this.props.contributorList.map(function(contributor) {
+      console.log('contributor', contributor)
       var initials = contributor.ownerData.initials;
       var points = contributor.ownerData.totalPoints;
+      var name = contributor.ownerData.name;
       var contributorColor = helpers.setColor(this.props.colorFn, points, this.props.colorKey);
 
       return (
         <ContributorInitials
           key={initials}
           initials={initials}
+          name={name}
           contributorColor={contributorColor}/>
       )
     }, this);
@@ -35,16 +38,17 @@ class ContributorInitials extends React.Component{
       button: {
           backgroundColor: `${this.props.contributorColor}`,
           opacity: 1,
-          marginLeft: '30%',
-          padding: '10px'
+          marginLeft: '30%'
         },
         column: {
           paddingBottom: '20px'
         }
     }
+    console.log(this.props.name)
+
     return(
         <Col key={this.props.initials} style={styles.column} md={3}>
-          <Button style={styles.button}>
+          <Button title={this.props.name} style={styles.button}>
             {this.props.initials}
           </Button>
         </Col>

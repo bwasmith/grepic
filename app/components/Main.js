@@ -192,7 +192,7 @@ class Main extends React.Component{
     helpers.getEpicStoriesByLabel(this.state.currentProject, currentEpic.label.name, this.state.token)
       .then(function(stories) {
         var epicData = this._processEpicData(stories.data);
-        // console.log(epicData.epicContributors)
+        console.log(epicData.epicContributors)
 
         this.setState({
           totalPoints: epicData.totalPoints,
